@@ -9,16 +9,20 @@ class Api::V1::MoviesController < ApplicationController
     render json: { data: movies }
   end
 
+#   This endpoint should:
+  # 1. retrieve movies from The Movie DB API based on a search query from the request
+  # 2. require that the search term is passed as a query parameter in the request
+  # 3. retrieve a maximum of 20 results.
+  # 4. include the title and the vote average of every movie
+
   def search
     query = params[:query]
-
     if query.present?
       movies = MovieGateway.search(query)
       render json: { data: movies}
     else
       render json: { error: 'Query parameter is required' }, status: :bad_request
     end
-
   end
 
 
