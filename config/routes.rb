@@ -15,10 +15,11 @@ Rails.application.routes.draw do
       resources :movies, only: [] do
         collection do
           get :top_rated
+          get :search
         end
       end
       # get 'movies/top_rated', to: 'movie#top_rated'
-      get 'movies/search', to: 'movies#search'
+      # get 'movies/search', to: 'movies#search'
       
     end
   end

@@ -6,6 +6,11 @@ class MovieGateway
     #when you're trying to define attributes for an objec that doesn't exist in your schema it MUST be defined as a PORO
   end
 
+  def self.search(query)
+    movies = connect_to_api("/3/search/movie", { query: query, language: "en-US", page: 1 })[:results]
+    movies.map { |movie| Movie.new(movie) }    
+  end
+
   private
 
   def self.connect_to_api(endpoint, parameters = {})
