@@ -12,8 +12,14 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:create, :index]
       resources :sessions, only: :create
-      resources :movies
+      resources :movies, only: [] do
+        collection do
+          get :top_rated
+        end
+      end
+      # get 'movies/top_rated', to: 'movie#top_rated'
       get 'movies/search', to: 'movies#search'
+      
     end
   end
 end
