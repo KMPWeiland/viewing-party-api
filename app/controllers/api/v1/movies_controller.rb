@@ -25,7 +25,6 @@ class Api::V1::MoviesController < ApplicationController
     #   }
     # end
     movies = MovieGateway.top_rated
-    require 'pry'; binding.pry
 
     #rendering a response
     render json: { data: movies }

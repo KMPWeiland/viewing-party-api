@@ -8,11 +8,11 @@ RSpec.describe "Moves Endpoint" do
       expect(response).to be_successful
       json = JSON.parse(response.body, symbolize_names: true)
 
-      require 'pry'; binding.pry
-      expect(json[:data][:id]).to be_a(String)
-      expect(json[:data][:type]).to eq("movie")
-      expect(json[:data][:attributes]).to have_key(:title)
-      expect(json[:data][:attributes]).to have_key(:vote_average)
+      # binding.pry
+      expect(json[:data][0][:id]).to be_a(String)
+      expect(json[:data][0][:type]).to eq("movie")
+      expect(json[:data][0][:attributes]).to have_key(:title)
+      expect(json[:data][0][:attributes]).to have_key(:vote_average)
     end
   end
 end
