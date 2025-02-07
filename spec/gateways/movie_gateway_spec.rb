@@ -6,9 +6,13 @@ RSpec.describe MovieGateway do
     # INPUT 
     # OUTPUT 
 
-    json_response = MovieGateway.top_rated 
-    # binding.pry
-    # expect(json_response[0].id).to eq("278")
+    movies = MovieGateway.top_rated 
+    
+    # unit tests for each element/method
+    expect(movies[0].id).not_to be_nil 
+    expect(movies[0]).to be_an_instance_of Movie
+    expect(movies[0].type).to eq("movie")
+    # expect(movies[0].).not_to be_nil 
     # expect(json_response[0]).to have_key :title
     # expect(json_response[0]).to have_key :type
     # expect(json_response[0]).to have_key :vote_average
@@ -49,4 +53,3 @@ end
   #     expect { MovieGateway.top_rated }.to raise_error(StandardError, "API Error")
   #   end
   # end
-end

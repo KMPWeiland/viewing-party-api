@@ -6,7 +6,7 @@ class Api::V1::MoviesController < ApplicationController
 
   def top_rated
     movies = MovieGateway.top_rated
-    render json: { data: movies }
+    render json: MovieSerializer.format_movies(movies)
   end
 
 #   This endpoint should:

@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       resources :sessions, only: :create
       resources :movies, only: [] do
         collection do
-          get :top_rated
+          get :top_rated  
           get :search
         end
       end
