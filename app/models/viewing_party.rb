@@ -1,6 +1,6 @@
 class ViewingParty < ApplicationRecord
-  has_many :users, through: :user_viewing_parties
   has_many :user_viewing_parties
+  has_many :users, through: :user_viewing_parties
 
   validates :name, presence: true
   validates :start_time, presence: true
@@ -21,10 +21,8 @@ class ViewingParty < ApplicationRecord
     puts "Viewing party created: #{viewing_party.id}"
 
 
-    host_id = invitees.first 
-    host = User.find_by(id: host_id)
-    raise ActiveRecord::RecordInvalid.new(viewing_party), "Host user not found" if host.nil?
-    puts "Host found: #{host.id}"
+    host = find_and_validate_host!(invitees, viewing_party)
+    puts "Host found: #{host}"
     # raise ActiveRecord::RecordInvalid.new(self.new), "Host user not found" if host.nil 
 
     UserViewingParty.create!(viewing_party: viewing_party, user: host, is_host: true)
@@ -32,6 +30,7 @@ class ViewingParty < ApplicationRecord
 
     # if new_viewing_party.persisted? #successfully saved? to prevent associating users w/ non-existent viewing parties
     # end
+    host_id = host.id
     invitees.each do |invitee_id|
       next if invitee_id == host_id
       invitee = User.find_by(id: invitee_id)
@@ -52,6 +51,13 @@ class ViewingParty < ApplicationRecord
 
   def self.extract_invitees(params)
     params[:invitees].map(&:to_i) || []
+  end
+
+  def self.find_and_validate_host!(invitees, viewing_party)
+    host_id = invitees.first 
+    host = User.find_by(id: host_id)
+    raise ActiveRecord::RecordInvalid.new(viewing_party), "Host user not found" if host.nil?
+    host
   end
 
 
