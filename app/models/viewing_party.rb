@@ -11,10 +11,9 @@ class ViewingParty < ApplicationRecord
 
   def self.create_with_invitees!(params)
     permitted_params = permit_params(params)
-    # permitted_params = params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
     puts "Params permitted: #{permitted_params}"
 
-    invitees = params[:invitees].map(&:to_i) || []
+    invitees = extract_invitees(params)
     puts "Invitees extracted: #{invitees}"
 
 
@@ -51,6 +50,9 @@ class ViewingParty < ApplicationRecord
     params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
   end
 
+  def self.extract_invitees(params)
+    params[:invitees].map(&:to_i) || []
+  end
 
 
  
