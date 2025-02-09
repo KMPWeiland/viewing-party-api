@@ -7,7 +7,6 @@ class Api::V1::ViewingPartiesController < ApplicationController
     movie_id = params[:movie_id] 
     movie_title = params[:movie_title] 
     invitees = params[:invitees].map(&:to_i) || []
-    host_id = invitees.first 
 
 
     #validate required params    
@@ -25,6 +24,7 @@ class Api::V1::ViewingPartiesController < ApplicationController
     end
 
     #find host user
+    host_id = invitees.first 
     host = User.find_by(id: host_id)
     return render json: { error: "Host user not found" }, status: :unprocessable_entity if host.nil?
 
@@ -45,27 +45,29 @@ class Api::V1::ViewingPartiesController < ApplicationController
       end
       
       #render success response
-      render json: {
-        data: {
-          id: new_viewing_party.id.to_s,
-          type: "viewing_party",
-          attributes: {
-            name: new_viewing_party.name, 
-            start_time: new_viewing_party.start_time,
-            end_time: new_viewing_party.end_time,
-            movie_id: new_viewing_party.movie_id,
-            movie_title: new_viewing_party.movie_title,
-            invitees: User.where(id: invitees).map do |user| {
-              id: user.id,
-              name: user.name, 
-              username: user.username
-            }
-            end
-          }
-        }
-      }, status: :created
+      render json: ViewingPartySerializer.format_viewing_party(new_viewing_party), status: :created
+
+      # render json: {
+      #   data: {
+      #     id: new_viewing_party.id.to_s,
+      #     type: "viewing_party",
+      #     attributes: {
+      #       name: new_viewing_party.name, 
+      #       start_time: new_viewing_party.start_time,
+      #       end_time: new_viewing_party.end_time,
+      #       movie_id: new_viewing_party.movie_id,
+      #       movie_title: new_viewing_party.movie_title,
+      #       invitees: User.where(id: invitees).map do |user| {
+      #         id: user.id,
+      #         name: user.name, 
+      #         username: user.username
+      #       }
+      #       end
+      #     }
+      #   }
+      # }, status: :created
     else
-      Rails.logger.error("❌ Viewing Party creation failed: #{new_viewing_party.errors.full_messages}")
+      Rails.logger.error("Viewing Party creation failed: #{new_viewing_party.errors.full_messages}")
       render json: { errors: new_viewing_party.errors.full_messages }, status: :unprocessable_entity
     end
     # else
