@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Viewing Party API", type: :request do
   before(:each) do
+    # DatabaseCleaner.clean_with(:truncation)  # Make sure we start clean
     @user = User.create!(id: 1, name: "John Doe", username: "johndoe", password: "password")
   end
   

@@ -48,8 +48,12 @@ class Api::V1::ViewingPartiesController < ApplicationController
       
       #render success response
       render json: ViewingPartySerializer.format_viewing_party(new_viewing_party), status: :created
+
   rescue ActiveRecord::RecordInvalid => e 
-    render json: { status: "error", message: e.errors}, status: :unprocessable_entity
+    render json: { 
+      status: "error", 
+      message: e.record.errors.full_messages
+    }, status: :unprocessable_entity
  
       # render json: {
       #   data: {

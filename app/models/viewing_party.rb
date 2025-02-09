@@ -15,13 +15,15 @@ class ViewingParty < ApplicationRecord
     invitees = params[:invitees].map(&:to_i) || []
 
     viewing_party = ViewingParty.create!(permitted_params)
-
+   
     host_id = invitees.first 
     host = User.find_by(id: host_id)
     raise ActiveRecord::RecordInvalid.new(viewing_party), "Host user not found" if host.nil?
+    puts "Host found: #{host.id}"
     # raise ActiveRecord::RecordInvalid.new(self.new), "Host user not found" if host.nil 
 
     UserViewingParty.create!(viewing_party: viewing_party, user: host, is_host: true)
+    
 
     # if new_viewing_party.persisted? #successfully saved? to prevent associating users w/ non-existent viewing parties
     # end
@@ -30,6 +32,8 @@ class ViewingParty < ApplicationRecord
       invitee = User.find_by(id: invitee_id)
       UserViewingParty.create!(viewing_party: viewing_party, user: invitee, is_host: false) if invitee
     end
+    puts "Users associated"
+
 
     viewing_party
 
