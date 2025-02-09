@@ -10,12 +10,18 @@ class ViewingParty < ApplicationRecord
   # validates :host_user_id, presence: true
 
   def self.create_with_invitees!(params)
-    permitted_params = params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
+    permitted_params = permit_params(params)
+    # permitted_params = params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
+    puts "Params permitted: #{permitted_params}"
 
     invitees = params[:invitees].map(&:to_i) || []
+    puts "Invitees extracted: #{invitees}"
+
 
     viewing_party = ViewingParty.create!(permitted_params)
-   
+    puts "Viewing party created: #{viewing_party.id}"
+
+
     host_id = invitees.first 
     host = User.find_by(id: host_id)
     raise ActiveRecord::RecordInvalid.new(viewing_party), "Host user not found" if host.nil?
@@ -38,6 +44,13 @@ class ViewingParty < ApplicationRecord
     viewing_party
 
   end
+
+  private
+
+  def self.permit_params(params)
+    params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
+  end
+
 
 
  
