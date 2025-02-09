@@ -1,52 +1,56 @@
 class Api::V1::ViewingPartiesController < ApplicationController
 
   def create
-    name = params[:name] 
-    start_time = params[:start_time] 
-    end_time = params[:end_time]
-    movie_id = params[:movie_id] 
-    movie_title = params[:movie_title] 
-    invitees = params[:invitees].map(&:to_i) || []
+    # name = params[:name] 
+    # start_time = params[:start_time] 
+    # end_time = params[:end_time]
+    # movie_id = params[:movie_id] 
+    # movie_title = params[:movie_title] 
+    new_viewing_party = ViewingParty.create_with_invitees!(params)
+
+    # invitees = params[:invitees].map(&:to_i) || []
 
 
     #validate required params    
-    if name.blank? 
-      return render json: { error: "Please provide a name for your viewing party" }, status: :unprocessable_entity
-    end
-    if movie_title.blank? || movie_id.blank?
-      return render json: { error: "Both movie_id and move_name must be provided" }, status: :unprocessable_entity
-    end
-    if start_time.blank? || end_time.blank? 
-      return render json: { error: "Both start_time and end_time must be provided" }, status: :unprocessable_entity
-    end
-    if invitees.blank?  
-      return render json: { error: "Please add invitees to your viewing party" }, status: :unprocessable_entity
-    end
+    # if name.blank? 
+    #   return render json: { error: "Please provide a name for your viewing party" }, status: :unprocessable_entity
+    # end
+    # if movie_title.blank? || movie_id.blank?
+    #   return render json: { error: "Both movie_id and move_name must be provided" }, status: :unprocessable_entity
+    # end
+    # if start_time.blank? || end_time.blank? 
+    #   return render json: { error: "Both start_time and end_time must be provided" }, status: :unprocessable_entity
+    # end
+    # if invitees.blank?  
+    #   return render json: { error: "Please add invitees to your viewing party" }, status: :unprocessable_entity
+    # end
 
     #find host user
-    host_id = invitees.first 
-    host = User.find_by(id: host_id)
-    return render json: { error: "Host user not found" }, status: :unprocessable_entity if host.nil?
+    # host_id = invitees.first 
+    # host = User.find_by(id: host_id)
+    # return render json: { error: "Host user not found" }, status: :unprocessable_entity if host.nil?
 
     #create a new viewing party
-    new_viewing_party = ViewingParty.create!(viewing_party_params)
+    # new_viewing_party = ViewingParty.create!(viewing_party_params)
 
-    #associate users with Viewing Party
-    if new_viewing_party.persisted?
-      invitees.each do |invitee_id|
-        invitee = User.find_by(id: invitee_id)
-        if invitee
-          UserViewingParty.create!(
-            viewing_party: new_viewing_party, 
-            user: invitee, 
-            is_host: invitee.id == host.id
-          )   
-        end        
-      end
+    # #associate users with Viewing Party
+    # if new_viewing_party.persisted?
+    #   invitees.each do |invitee_id|
+    #     invitee = User.find_by(id: invitee_id)
+    #     if invitee
+    #       UserViewingParty.create!(
+    #         viewing_party: new_viewing_party, 
+    #         user: invitee, 
+    #         is_host: invitee.id == host.id
+    #       )   
+    #     end        
+    #   end
       
       #render success response
       render json: ViewingPartySerializer.format_viewing_party(new_viewing_party), status: :created
-
+  rescue ActiveRecord::RecordInvalid => e 
+    render json: { status: "error", message: e.errors}, status: :unprocessable_entity
+ 
       # render json: {
       #   data: {
       #     id: new_viewing_party.id.to_s,
@@ -66,21 +70,18 @@ class Api::V1::ViewingPartiesController < ApplicationController
       #     }
       #   }
       # }, status: :created
-    else
-      Rails.logger.error("Viewing Party creation failed: #{new_viewing_party.errors.full_messages}")
-      render json: { errors: new_viewing_party.errors.full_messages }, status: :unprocessable_entity
-    end
+   
     # else
     #   render json: { errors: viewing_party.errors.full_messages }, status: :unprocessable_entity
     # end
   end
 
 
-  private
+  # private
 
-  def viewing_party_params
-    params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
-  end
+  # def viewing_party_params
+  #   params.permit(:name, :start_time, :end_time, :movie_id, :movie_title)
+  # end
 
 end
 
