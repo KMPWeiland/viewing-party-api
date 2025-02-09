@@ -18,9 +18,10 @@ Rails.application.routes.draw do
           get :search
         end
       end
-      # get 'movies/top_rated', to: 'movie#top_rated'
-      # get 'movies/search', to: 'movies#search'
-      
+      resources :viewing_parties, only: [:create, :update]
     end
   end
 end
+
+     # get 'movies/top_rated', to: 'movie#top_rated'
+      # get 'movies/search', to: 'movies#search'

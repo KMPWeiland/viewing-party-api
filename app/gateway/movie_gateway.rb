@@ -3,8 +3,6 @@ class MovieGateway
     movies = connect_to_api("/3/movie/top_rated", { language:
      "en-US", page: 1 })[:results]
     movie_objects = movies.map { |movie| Movie.new(movie) }
-
-   
     #when you're trying to define attributes for an object that doesn't exist in your schema it MUST be defined as a PORO
   end
 
