@@ -26,7 +26,6 @@ RSpec.describe "Viewing Party API", type: :request do
     expect(json[:data][:type]).to eq("viewing_party")
     expect(json[:data][:attributes][:name]).to eq("CJ's partay")
     expect(json[:data][:attributes][:movie_id]).to eq(278)
-    # binding.pry
     expect(json[:data][:attributes][:invitees][0][:id]).to eq(11)
   end
 end 

@@ -61,10 +61,17 @@ class ViewingParty < ApplicationRecord
   end
 
   def self.associate_user_with_viewing_party(viewing_party, invitees, host)
-    host_id = host.id
+    the_host_id = host.id
+    puts "Processing invitees: #{invitees}"
+    puts "Host ID: #{the_host_id}"  
+
+    invitees << host_id unless invitees.include?(the_host_id)
+
     invitees.each do |invitee_id|
-      # next if invitee_id == host_id?
+      # next if invitee_id == the_host_id
       invitee = User.find_by(id: invitee_id)
+      puts "Associating invitee: #{invitee_id}" if invitee
+      is_host = (invitee_id == the_host_id)
       UserViewingParty.create!(viewing_party: viewing_party, user: invitee, is_host: false) if invitee
     end
   end
