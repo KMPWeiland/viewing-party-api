@@ -18,7 +18,7 @@ Rails.application.routes.draw do
           get :search
         end
       end
-      resources :viewing_parties, only: [:create] do
+      resources :viewing_parties, only: [:index, :create] do
         member do
           patch :add_user
         end

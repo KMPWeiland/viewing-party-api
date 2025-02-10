@@ -19,14 +19,16 @@ class ViewingParty < ApplicationRecord
     viewing_party = ViewingParty.create!(permitted_params)
     puts "Viewing party created: #{viewing_party}"
 
+    # binding.pry
+
     host = find_and_validate_host!(invitees, viewing_party)
     puts "Host found: #{host}"
+   
     # raise ActiveRecord::RecordInvalid.new(self.new), "Host user not found" if host.nil 
-
     # UserViewingParty.create!(viewing_party: viewing_party, user: host, is_host: true)
-    
     # if new_viewing_party.persisted? #successfully saved? to prevent associating users w/ non-existent viewing parties
     # end
+
     puts "Invitees before association with VP: #{invitees}"
     associate_user_with_viewing_party(viewing_party, invitees, host)
     # host_id = host.id
@@ -40,7 +42,6 @@ class ViewingParty < ApplicationRecord
     puts "Viewing party : #{viewing_party}" 
 
     viewing_party
-
   end
 
   private

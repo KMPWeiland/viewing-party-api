@@ -1,5 +1,13 @@
 class Api::V1::ViewingPartiesController < ApplicationController
 
+  
+  def index
+    # binding.pry
+    viewing_parties = ViewingParty.all
+    render json: ViewingPartySerializer.format_viewing_parties(viewing_parties), status: :ok
+  end
+
+  
   def create
     new_viewing_party = ViewingParty.create_with_invitees!(params)
  
