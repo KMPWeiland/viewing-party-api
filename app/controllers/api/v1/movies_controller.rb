@@ -19,7 +19,7 @@ class Api::V1::MoviesController < ApplicationController
     query = params[:query]
     if query.present?
       movies = MovieGateway.search(query)
-      render json: { data: movies}
+      render json: MovieSerializer.format_movies(movies)
     else
       render json: { error: 'Query parameter is required' }, status: :bad_request
     end

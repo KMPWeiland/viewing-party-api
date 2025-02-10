@@ -18,9 +18,14 @@ Rails.application.routes.draw do
           get :search
         end
       end
-      # get 'movies/top_rated', to: 'movie#top_rated'
-      # get 'movies/search', to: 'movies#search'
-      
+      resources :viewing_parties, only: [:index, :create] do
+        member do
+          patch :add_user
+        end
+      end
     end
   end
 end
+
+     # get 'movies/top_rated', to: 'movie#top_rated'
+      # get 'movies/search', to: 'movies#search'
