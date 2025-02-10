@@ -16,28 +16,28 @@ class ViewingParty < ApplicationRecord
     invitees = extract_invitees(params)
     puts "Invitees extracted: #{invitees}"
 
-
     viewing_party = ViewingParty.create!(permitted_params)
-    puts "Viewing party created: #{viewing_party.id}"
-
+    puts "Viewing party created: #{viewing_party}"
 
     host = find_and_validate_host!(invitees, viewing_party)
     puts "Host found: #{host}"
     # raise ActiveRecord::RecordInvalid.new(self.new), "Host user not found" if host.nil 
 
-    UserViewingParty.create!(viewing_party: viewing_party, user: host, is_host: true)
+    # UserViewingParty.create!(viewing_party: viewing_party, user: host, is_host: true)
     
-
     # if new_viewing_party.persisted? #successfully saved? to prevent associating users w/ non-existent viewing parties
     # end
-    host_id = host.id
-    invitees.each do |invitee_id|
-      next if invitee_id == host_id
-      invitee = User.find_by(id: invitee_id)
-      UserViewingParty.create!(viewing_party: viewing_party, user: invitee, is_host: false) if invitee
-    end
+    puts "Invitees before association with VP: #{invitees}"
+    associate_user_with_viewing_party(viewing_party, invitees, host)
+    # host_id = host.id
+    # invitees.each do |invitee_id|
+    #   next if invitee_id == host_id
+    #   invitee = User.find_by(id: invitee_id)
+    #   UserViewingParty.create!(viewing_party: viewing_party, user: invitee, is_host: false) if invitee
+    # end
     puts "Users associated"
-
+    puts "Invitees after association with VP: #{invitees}"
+    puts "Viewing party : #{viewing_party}" 
 
     viewing_party
 
@@ -58,6 +58,19 @@ class ViewingParty < ApplicationRecord
     host = User.find_by(id: host_id)
     raise ActiveRecord::RecordInvalid.new(viewing_party), "Host user not found" if host.nil?
     host
+  end
+
+  def self.associate_user_with_viewing_party(viewing_party, invitees, host)
+    host_id = host.id
+    invitees.each do |invitee_id|
+      # next if invitee_id == host_id?
+      invitee = User.find_by(id: invitee_id)
+      UserViewingParty.create!(viewing_party: viewing_party, user: invitee, is_host: false) if invitee
+    end
+  end
+
+  def self.create_user_viewing_party!(viewing_party, user, is_host)
+    UserViewingParty.create!(viewing_party: viewing_party, user: host, is_host: true)
   end
 
 
