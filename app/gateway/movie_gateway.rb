@@ -12,6 +12,14 @@ class MovieGateway
     movies.map { |movie| Movie.new(movie) }    
   end
 
+  def self.fetch_movie_details(movie_id)
+    movie_details = connect_to_api("/3/movie/#{movie_id}", { append_to_response:
+    'credits,reviews', language: "en-US", page: 1, include_adult: false })
+    # binding.pry
+
+    movie_object = Movie.new(movie_details)   
+  end
+
   private
 
   def self.connect_to_api(endpoint, parameters = {})
