@@ -1,22 +1,43 @@
 require "rails_helper"
 
 RSpec.describe MovieGateway do
-  it "should make call to TMDB to retrieve movie data" do
-    # when testing gateways, think of the following:
-    # INPUT 
-    # OUTPUT 
-
-    movies = MovieGateway.top_rated 
-    
-    # unit tests for each element/method
-    expect(movies[0].id).not_to be_nil 
-    expect(movies[0]).to be_an_instance_of Movie
-    expect(movies[0].type).to eq("movie")
-    # expect(movies[0].).not_to be_nil 
-    # expect(json_response[0]).to have_key :title
-    # expect(json_response[0]).to have_key :type
-    # expect(json_response[0]).to have_key :vote_average
+  it "should make call to TMDB to retrieve TOP movie data", :vcr do
+    VCR.use_cassette("should_make_call_to_TMDB_to_retrieve_TOP_movie_data") do
+  
+      movies = MovieGateway.top_rated 
+      # unit tests for each element/method
+      expect(movies[0].id).not_to be_nil 
+      expect(movies[0]).to be_an_instance_of Movie
+      expect(movies[0].type).to eq("movie")
+      expect(movies[0].vote_average).not_to be_nil 
+    end
   end
+
+  describe '.fetch_movie_details' do
+
+    it "should make a call to TMDB to retrieve movie data by movie id", :vcr do
+      VCR.use_cassette("should_make_call_to_TMDB_to_retrieve_movie_data_by_id") do
+    
+        movie_id = MovieGateway.top_rated.first.id 
+        # binding.pry
+        response_body = MovieGateway.fetch_movie_details(movie_id)
+        
+        expect(response_body.id).not_to be_nil 
+        expect(response_body.type).to eq("movie")
+        expect(response_body).to be_an_instance_of Movie
+        # expect(response_body.cast).to be_an(Array)
+        expect(response_body.release_date).not_to be_nil 
+        expect(response_body.title).not_to be_nil 
+        expect(response_body.vote_average).not_to be_nil 
+        expect(response_body.runtime).not_to be_nil 
+        expect(response_body.genres).not_to be_nil 
+        expect(response_body.summary).not_to be_nil 
+        # expect(response_body.cast).not_to be_nil
+        
+      end
+    end
+  end
+  
 end
 
 

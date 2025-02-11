@@ -13,4 +13,24 @@ class MovieSerializer
     end
   }
   end
+
+  def self.format_movie_data(movie)
+    { 
+      data: 
+      {
+        id: movie.id,
+        type: movie.type,
+        attributes: {
+          title: movie.title,
+          vote_average: movie.vote_average, 
+          runtime: movie.runtime,
+          genres: movie.genres,
+          summary: movie.summary,
+          cast: movie.cast,
+          total_reviews: reviews.count
+        }
+      }
+    end
+  }
+  end
 end

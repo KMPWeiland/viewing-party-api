@@ -16,6 +16,7 @@ Rails.application.routes.draw do
         collection do
           get :top_rated  
           get :search
+          get :details
         end
       end
       resources :viewing_parties, only: [:index, :create] do
