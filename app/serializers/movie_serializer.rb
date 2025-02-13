@@ -25,12 +25,11 @@ class MovieSerializer
           vote_average: movie.vote_average, 
           runtime: movie.runtime,
           genres: movie.genres,
-          summary: movie.summary,
-          cast: movie.cast,
-          total_reviews: reviews.count
+          summary: movie.summary
+          # cast: movie.cast,
+          # total_reviews: reviews.count
         }
       }
-    end
-  }
+    }
   end
 end

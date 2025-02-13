@@ -14,7 +14,6 @@ RSpec.describe MovieGateway do
   end
 
   describe '.fetch_movie_details' do
-
     it "should make a call to TMDB to retrieve movie data by movie id", :vcr do
       VCR.use_cassette("should_make_call_to_TMDB_to_retrieve_movie_data_by_id") do
     

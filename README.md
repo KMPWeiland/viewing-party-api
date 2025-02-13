@@ -15,3 +15,12 @@ Viewing Party is an application that allows users to explore movies and create a
 Spend some time familiarizing yourself with the functionality and structure of the application so far.
 
 Run the application and test out some endpoints: `rails s`
+
+
+## TMDB Endpoints Used
+Top_Rated: https://developer.themoviedb.org/reference/movie-top-rated-list
+Search: https://developer.themoviedb.org/reference/search-movie
+                    > /api/v1/movies/search
+Details: https://developer.themoviedb.org/reference/movie-details
+Credits: https://developer.themoviedb.org/reference/movie-credits
+Reviews: https://developer.themoviedb.org/reference/movie-reviews
